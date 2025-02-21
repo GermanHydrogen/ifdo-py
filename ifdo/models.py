@@ -45,19 +45,23 @@ Classes:
     ImageSetHeader: Represents an image set header with detailed metadata.
     iFDO: Implements the Image FAIR Digital Object specification.
 """
+from __future__ import annotations
 
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, ConfigDict
 from stringcase import spinalcase
 from yaml import safe_dump, safe_load
 
-from ifdo.model import model
 
-ifdo_model = model(case_func=spinalcase)  # Use spinal case for all field names
+class KebabCaseModel(BaseModel):
+    model_config = ConfigDict(
+        alias_generator = spinalcase,
+        populate_by_name = True
+    )
 
 
 class ImageAcquisition(str, Enum):
@@ -274,8 +278,7 @@ class ImageFaunaAttraction(str, Enum):
     LIGHT = "light"
 
 
-@ifdo_model
-class ImagePI:
+class ImagePI(KebabCaseModel):
     """
     Represent an image PI (Principal Investigator) with associated information.
 
@@ -292,8 +295,7 @@ class ImagePI:
     uri: str | None = None
 
 
-@ifdo_model
-class ImageCreator:
+class ImageCreator(KebabCaseModel):
     """
     Represent an image creator with associated information.
 
@@ -310,8 +312,7 @@ class ImageCreator:
     uri: str | None = None
 
 
-@ifdo_model
-class ImageAnnotationLabel:
+class ImageAnnotationLabel(KebabCaseModel):
     """
     Represent an image annotation label.
 
@@ -329,8 +330,7 @@ class ImageAnnotationLabel:
     info: str
 
 
-@ifdo_model
-class ImageAnnotationCreator:
+class ImageAnnotationCreator(KebabCaseModel):
     """
     Create an image annotation object with associated metadata.
 
@@ -348,8 +348,7 @@ class ImageAnnotationCreator:
     type: str
 
 
-@ifdo_model
-class AnnotationLabel:
+class AnnotationLabel(KebabCaseModel):
     """
     Represent an annotation label with associated metadata.
 
@@ -369,8 +368,7 @@ class AnnotationLabel:
     confidence: float | None = None
 
 
-@ifdo_model
-class ImageAnnotation:
+class ImageAnnotation(KebabCaseModel):
     """
     Represent an image annotation with coordinates, labels, shape, and frames.
 
@@ -393,8 +391,7 @@ class ImageAnnotation:
     frames: list[float] | None = None
 
 
-@ifdo_model
-class ImageCameraPose:
+class ImageCameraPose(KebabCaseModel):
     """
     Represent a camera pose with UTM coordinates and orientation.
 
@@ -417,8 +414,7 @@ class ImageCameraPose:
     pose_absolute_orientation_utm_matrix: list[list[float]]
 
 
-@ifdo_model
-class ImageCameraHousingViewport:
+class ImageCameraHousingViewport(KebabCaseModel):
     """
     Represent a camera housing viewport with its properties.
 
@@ -438,8 +434,7 @@ class ImageCameraHousingViewport:
     viewport_extra_description: str | None = None
 
 
-@ifdo_model
-class ImageFlatportParameters:
+class ImageFlatportParameters(KebabCaseModel):
     """
     Define parameters for a flatport in an optical system.
 
@@ -461,8 +456,7 @@ class ImageFlatportParameters:
     flatport_extra_description: str | None = None
 
 
-@ifdo_model
-class ImageDomeportParameters:
+class ImageDomeportParameters(KebabCaseModel):
     """
     Define parameters for a domeport in an optical system.
 
@@ -483,8 +477,7 @@ class ImageDomeportParameters:
     domeport_extra_description: str | None = None
 
 
-@ifdo_model
-class ImageCameraCalibrationModel:
+class ImageCameraCalibrationModel(KebabCaseModel):
     """
     Define a camera calibration model with intrinsic parameters and distortion coefficients.
 
@@ -512,8 +505,7 @@ class ImageCameraCalibrationModel:
     calibration_model_extra_description: str | None = None
 
 
-@ifdo_model
-class ImagePhotometricCalibration:
+class ImagePhotometricCalibration(KebabCaseModel):
     """
     Represent photometric calibration parameters for image processing.
 
@@ -539,8 +531,7 @@ class ImagePhotometricCalibration:
     photometric_water_properties_description: str
 
 
-@ifdo_model
-class ImageContext:
+class ImageContext(KebabCaseModel):
     """
     Represent a context within the ifdo model framework.
 
@@ -559,8 +550,7 @@ class ImageContext:
         return hash((self.name, self.uri))
 
 
-@ifdo_model
-class ImageLicense:
+class ImageLicense(KebabCaseModel):
     """
     Represent a software license.
 
@@ -579,77 +569,7 @@ class ImageLicense:
         return hash((self.name, self.uri))
 
 
-class CoordinateValidation(BaseModel):
-    """
-    Validate and store image coordinate data.
-
-    This class extends BaseModel to provide validation and storage for image coordinate data, specifically latitude
-    and longitude. It ensures that the provided coordinates are within valid ranges and are not None. The class uses
-    Pydantic's field validation system to enforce these constraints.
-
-    Attributes:
-        image_latitude (float | None): The latitude of the image, must be between -90 and 90 degrees.
-        image_longitude (float | None): The longitude of the image, must be between -180 and 180 degrees.
-
-    Methods:
-        validate_latitude: Class method to validate the latitude value, ensuring it is not None.
-        validate_longitude: Class method to validate the longitude value, ensuring it is not None.
-    """
-
-    image_latitude: float | None = Field(None, ge=-90, le=90)
-    image_longitude: float | None = Field(None, ge=-180, le=180)
-
-    @classmethod
-    @field_validator("image_latitude")
-    def validate_latitude(cls: type["CoordinateValidation"], value: float | None) -> float:
-        """
-        Validate the latitude value for image coordinates.
-
-        This class method is a field validator for the 'image_latitude' field. It checks if the provided latitude value
-        is not None, ensuring that a latitude is always provided for image coordinates. The method is used in
-        conjunction with Pydantic's validation system.
-
-        Args:
-            cls (type['CoordinateValidation']): The class on which the validator is defined.
-            value (float | None): The latitude value to be validated. Can be a float or None.
-
-        Returns:
-            float: The validated latitude value.
-
-        Raises:
-            ValueError: If the latitude value is None.
-        """
-        if value is None:
-            raise ValueError("Latitude is required")
-        return value
-
-    @classmethod
-    @field_validator("image_longitude")
-    def validate_longitude(cls: type["CoordinateValidation"], value: float | None) -> float:
-        """
-        Validate the longitude value for image coordinates.
-
-        This method is a class method and field validator for the 'image_longitude' field. It checks if the provided
-        longitude value is not None and returns the value if valid. The method is designed to be used with Pydantic's
-        field validation system.
-
-        Args:
-            cls (type['CoordinateValidation']): The class on which this method is called.
-            value (float | None): The longitude value to be validated, can be a float or None.
-
-        Returns:
-            float: The validated longitude value.
-
-        Raises:
-            ValueError: If the longitude value is None.
-        """
-        if value is None:
-            raise ValueError("Longitude is required")
-        return value
-
-
-@ifdo_model
-class ImageData:
+class ImageData(KebabCaseModel):
     """
     Represent image data with associated metadata and annotations.
 
@@ -796,8 +716,7 @@ class ImageData:
     image_annotations: list[ImageAnnotation] | None = None
 
 
-@ifdo_model
-class ImageSetHeader:
+class ImageSetHeader(KebabCaseModel):
     """
     Represent an image set header with detailed metadata and attributes.
 
@@ -948,8 +867,7 @@ class ImageSetHeader:
     image_annotations: list[ImageAnnotation] | None = None
 
 
-@ifdo_model
-class iFDO:  # noqa: N801
+class iFDO(KebabCaseModel):  # noqa: N801
     """
     Class implementation of the Image FAIR Digital Object (iFDO) specification.
 
@@ -979,6 +897,13 @@ class iFDO:  # noqa: N801
 
     image_set_header: ImageSetHeader
     image_set_items: dict[str, list[ImageData]]
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> iFDO:
+        return cls.model_validate(data)
+
+    def to_dict(self) -> dict[str, Any]:
+        return self.model_dump(mode="json", by_alias=True, exclude_none=True)
 
     @classmethod
     def load(cls, path: str | Path) -> "iFDO":
