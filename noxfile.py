@@ -1,5 +1,5 @@
 import nox
-from nox_poetry import session
+from nox import session
 
 nox.options.default_venv_backend = "uv"
 
