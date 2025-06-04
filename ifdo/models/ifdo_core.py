@@ -85,7 +85,7 @@ class ImageLicense(BaseModel):
         return hash((self.name, self.uri))
 
 
-class ImageCoreFields(BaseModel):
+class ImageCoreFields:
     image_datetime: datetime | None = None
     image_latitude: float | None = Field(None, ge=-90, le=90)
     image_longitude: float | None = Field(None, ge=-180, le=180)
