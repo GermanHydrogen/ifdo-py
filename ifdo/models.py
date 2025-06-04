@@ -677,6 +677,7 @@ class ImageData:
         image_license (ImageLicense | None): License information for the image.
         image_copyright (str | None): Copyright information for the image.
         image_abstract (str | None): Brief description or abstract of the image content.
+        image_set_local_path (str | None: Local relative or absolute path to a directory in which the referenced image files are located.
         image_acquisition (ImageAcquisition | None): Details about the image acquisition process.
         image_quality (ImageQuality | None): Quality metrics for the image.
         image_deployment (ImageDeployment | None): Information about the deployment of the imaging equipment.
@@ -745,6 +746,7 @@ class ImageData:
     image_license: ImageLicense | None = None
     image_copyright: str | None = None
     image_abstract: str | None = None
+    image_set_local_path: str | None = None
 
     # iFDO capture (optional)
     image_acquisition: ImageAcquisition | None = None
@@ -825,6 +827,7 @@ class ImageSetHeader:
         image_license (ImageLicense | None): License information for the image.
         image_copyright (str | None): Copyright information for the image.
         image_abstract (str | None): Brief description or abstract of the image content.
+        image_set_local_path (str | None: Local relative or absolute path to a directory in which the referenced image files are located.
         image_acquisition (ImageAcquisition | None): Details about the image acquisition process.
         image_quality (ImageQuality | None): Quality metrics for the image.
         image_deployment (ImageDeployment | None): Information about the deployment of the imaging equipment.
@@ -897,6 +900,7 @@ class ImageSetHeader:
     image_license: ImageLicense | None = None
     image_copyright: str | None = None
     image_abstract: str | None = None
+    image_set_local_path: str | None = None
 
     # iFDO capture (optional)
     image_acquisition: ImageAcquisition | None = None
