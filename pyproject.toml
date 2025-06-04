@@ -6,6 +6,7 @@ readme = "README.md"
 authors = [
     {name = "Kevin Barnard", email = "kbarnard@mbari.org"},
     {name = "Chris Jackett", email = "chris.jackett@csiro.au"},
+    {name = "Karsten Schimpf", email = "karsten.schimpf@awi.de"},
 ]
 license = {text = "MIT"}
 requires-python = ">=3.10"
