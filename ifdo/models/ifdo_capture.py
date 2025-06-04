@@ -26,6 +26,8 @@ from typing import Any
 
 from pydantic import BaseModel
 
+from ifdo.models._kebab_case_model import KebabCaseModel
+
 
 class ImageAcquisition(str, Enum):
     """Define an enumeration for image acquisition types.
@@ -241,7 +243,7 @@ class ImageFaunaAttraction(str, Enum):
     LIGHT = "light"
 
 
-class ImageCameraPose(BaseModel):
+class ImageCameraPose(KebabCaseModel):
     """
     Represent a camera pose with UTM coordinates and orientation.
 
@@ -264,7 +266,7 @@ class ImageCameraPose(BaseModel):
     pose_absolute_orientation_utm_matrix: list[list[float]]
 
 
-class ImageCameraHousingViewport(BaseModel):
+class ImageCameraHousingViewport(KebabCaseModel):
     """
     Represent a camera housing viewport with its properties.
 
@@ -284,7 +286,7 @@ class ImageCameraHousingViewport(BaseModel):
     viewport_extra_description: str | None = None
 
 
-class ImageFlatportParameters(BaseModel):
+class ImageFlatportParameters(KebabCaseModel):
     """
     Define parameters for a flatport in an optical system.
 
@@ -306,7 +308,7 @@ class ImageFlatportParameters(BaseModel):
     flatport_extra_description: str | None = None
 
 
-class ImageDomeportParameters(BaseModel):
+class ImageDomeportParameters(KebabCaseModel):
     """
     Define parameters for a domeport in an optical system.
 
@@ -327,7 +329,7 @@ class ImageDomeportParameters(BaseModel):
     domeport_extra_description: str | None = None
 
 
-class ImageCameraCalibrationModel(BaseModel):
+class ImageCameraCalibrationModel(KebabCaseModel):
     """
     Define a camera calibration model with intrinsic parameters and distortion coefficients.
 
@@ -355,7 +357,7 @@ class ImageCameraCalibrationModel(BaseModel):
     calibration_model_extra_description: str | None = None
 
 
-class ImagePhotometricCalibration(BaseModel):
+class ImagePhotometricCalibration(KebabCaseModel):
     """
     Represent photometric calibration parameters for image processing.
 
@@ -381,7 +383,7 @@ class ImagePhotometricCalibration(BaseModel):
     photometric_water_properties_description: str
 
 
-class ImageCaptureFields(BaseModel):
+class ImageCaptureFields:
     image_acquisition: ImageAcquisition | None = None
     image_quality: ImageQuality | None = None
     image_deployment: ImageDeployment | None = None

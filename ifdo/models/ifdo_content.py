@@ -7,13 +7,15 @@ Classes:
     AnnotationLabel: Represents an annotation label with metadata.
     ImageAnnotation: Represents an image annotation with coordinates and labels.
 """
-
 from datetime import datetime
 
 from pydantic import BaseModel
+from pydantic import Field
+
+from ifdo.models._kebab_case_model import KebabCaseModel
 
 
-class ImageAnnotationLabel(BaseModel):
+class ImageAnnotationLabel(KebabCaseModel):
     """
     Represent an image annotation label.
 
@@ -28,10 +30,10 @@ class ImageAnnotationLabel(BaseModel):
 
     id: str
     name: str
-    info: str
+    info: str | None = None
 
 
-class ImageAnnotationCreator(BaseModel):
+class ImageAnnotationCreator(KebabCaseModel):
     """
     Create an image annotation object with associated metadata.
 
@@ -46,10 +48,9 @@ class ImageAnnotationCreator(BaseModel):
 
     id: str
     name: str
-    type: str
 
 
-class AnnotationLabel(BaseModel):
+class AnnotationLabel(KebabCaseModel):
     """
     Represent an annotation label with associated metadata.
 
@@ -65,11 +66,11 @@ class AnnotationLabel(BaseModel):
 
     label: str
     annotator: str
-    created_at: datetime | None = None
-    confidence: float | None = None
+    created_at: datetime
+    confidence: float | None = Field(None, ge=0, le=1)
 
 
-class ImageAnnotation(BaseModel):
+class ImageAnnotation(KebabCaseModel):
     """
     Represent an image annotation with coordinates, labels, shape, and frames.
 
@@ -92,7 +93,7 @@ class ImageAnnotation(BaseModel):
     frames: list[float] | None = None
 
 
-class ImageContentFields(BaseModel):
+class ImageContentFields:
     image_entropy: float | None = None
     image_particle_count: int | None = None
     image_average_color: list[int] | None = None
