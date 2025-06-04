@@ -8,11 +8,16 @@ from ifdo.models import ImageLicense, ImageContext, ImagePI, ImageCreator, Image
 
 OUTPUT_PATH = "/tmp/test_ifdo.json"
 
+
 def test_save():
-    ifdo = iFDO(image_set_header=ImageSetHeader(image_set_name="SO268 SO268-1_21-1_OFOS SO_CAM-1_Photo_OFOS",
-                                                image_set_uuid="f840644a-fe4a-46a7-9791-e32c211bcbf5",
-                                                image_set_handle= "https://hdl.handle.net/20.500.12085/f840644a-fe4a-46a7-9791-e32c211bcbf5"),
-                image_set_items={})
+    ifdo = iFDO(
+        image_set_header=ImageSetHeader(
+            image_set_name="SO268 SO268-1_21-1_OFOS SO_CAM-1_Photo_OFOS",
+            image_set_uuid="f840644a-fe4a-46a7-9791-e32c211bcbf5",
+            image_set_handle="https://hdl.handle.net/20.500.12085/f840644a-fe4a-46a7-9791-e32c211bcbf5",
+        ),
+        image_set_items={},
+    )
 
     ifdo.image_set_header.image_abstract = "Acquired by camera SO_CAM-1_Photo_OFOS mounted on platform SO_PFM-01_OFOS during project SO268 (event: SO268-1_21-1_OFOS). Navigation data were automatically edited by the MarIQT software (removal of outliers, smoothed and splined to fill time gaps) and linked to the image data by timestamp."
     ifdo.image_set_header.image_copyright = "Copyright (C)"
@@ -56,6 +61,7 @@ def test_save():
     )
     validator = Draft202012Validator(schema, registry=registry)
     validator.validate(result)
+
 
 def load_json(filepath: str) -> dict:
     with open(filepath, "r") as file:
