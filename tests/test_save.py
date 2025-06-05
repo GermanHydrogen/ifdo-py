@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from typing import Any, cast
 
 from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
@@ -79,6 +80,6 @@ def validate_ifdo(ifdo: iFDO) -> None:
     validator = Draft202012Validator(schema, registry=registry)
     validator.validate(ifdo.to_dict())
 
-def load_json(filepath: str) -> dict:
+def load_json(filepath: str) -> dict[str, Any]:
     with open(filepath, "r") as file:
-        return json.load(file)
+        return cast(dict[str, Any], json.load(file))
