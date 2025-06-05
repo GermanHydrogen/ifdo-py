@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from typing import Any, cast
 
 from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
@@ -63,6 +64,6 @@ def test_save():
     validator.validate(result)
 
 
-def load_json(filepath: str) -> dict:
+def load_json(filepath: str) -> dict[str, Any]:
     with open(filepath, "r") as file:
-        return json.load(file)
+        return cast(dict[str, Any], json.load(file))
