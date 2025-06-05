@@ -9,9 +9,21 @@ from ifdo.models import ImageLicense, ImageContext, ImagePI, ImageCreator, Image
 
 OUTPUT_PATH = "/tmp/test_ifdo.json"
 
+def test_save_image():
+    ifdo = create_ifdo()
+    ifdo.image_set_items["SO268-1_21-1_OFOS_SO_CAM-1_20190304_083724.JPG"] = create_ifdo_item()
 
-def test_save():
-    ifdo = iFDO(
+    validate_ifdo(ifdo)
+
+
+def test_save_video():
+    ifdo = create_ifdo()
+    ifdo.image_set_items["SO268-1_21-1_OFOS_SO_CAM-1_20190304_083724.JPG"] = [create_ifdo_item()]
+
+    validate_ifdo(ifdo)
+
+def create_ifdo() -> iFDO:
+    ifdo =  iFDO(
         image_set_header=ImageSetHeader(
             image_set_name="SO268 SO268-1_21-1_OFOS SO_CAM-1_Photo_OFOS",
             image_set_uuid="f840644a-fe4a-46a7-9791-e32c211bcbf5",
@@ -37,15 +49,20 @@ def test_save():
     ifdo.image_set_header.image_coordinate_uncertainty_meters = 0.1
     ifdo.image_set_header.image_datetime = datetime(2020, 1, 1)
 
+    return ifdo
+
+
+def create_ifdo_item() -> ImageData:
     image = ImageData()
     image.image_handle = "test"
     image.image_hash_sha256 = "83f30eb35d1325c44c85fba0cf478825c0a629d20177a945069934f6cd07e087"
     image.image_uuid = "c6b8d981-05c7-449f-85a9-906ab866bfb6"
     image.image_datetime = datetime(2020, 1, 1)
-    ifdo.image_set_items["SO268-1_21-1_OFOS_SO_CAM-1_20190304_083724.JPG"] = [image]
 
-    result = ifdo.to_dict()
+    return image
 
+
+def validate_ifdo(ifdo: iFDO) -> None:
     schema = load_json("tests/schema/ifdo-v2.1.0.json")
 
     registry = Registry().with_resources(
@@ -61,8 +78,7 @@ def test_save():
         ]
     )
     validator = Draft202012Validator(schema, registry=registry)
-    validator.validate(result)
-
+    validator.validate(ifdo.to_dict())
 
 def load_json(filepath: str) -> dict[str, Any]:
     with open(filepath, "r") as file:

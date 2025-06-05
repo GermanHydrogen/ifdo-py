@@ -29,19 +29,11 @@ from pathlib import Path
 from typing import Any
 
 import yaml
-from pydantic import BaseModel, ConfigDict
 
+from ifdo.models._kebab_case_model import KebabCaseModel
 from ifdo.models.ifdo_capture import ImageCaptureFields
 from ifdo.models.ifdo_content import ImageContentFields
 from ifdo.models.ifdo_core import ImageCoreFields
-
-
-def _spinalcase_rename(field_name: str) -> str:
-    return field_name.replace("_", "-")
-
-
-class KebabCaseModel(BaseModel):
-    model_config = ConfigDict(alias_generator=_spinalcase_rename, populate_by_name=True)
 
 
 class ImageData(KebabCaseModel, ImageCoreFields, ImageCaptureFields, ImageContentFields):
@@ -240,7 +232,7 @@ class iFDO(KebabCaseModel):  # noqa: N801
     """
 
     image_set_header: ImageSetHeader
-    image_set_items: dict[str, list[ImageData]]
+    image_set_items: dict[str, ImageData | list[ImageData]]
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> iFDO:
