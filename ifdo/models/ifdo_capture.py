@@ -24,8 +24,6 @@ Classes:
 from enum import Enum
 from typing import Any
 
-from pydantic import BaseModel
-
 from ifdo.models._kebab_case_model import KebabCaseModel
 
 
@@ -384,6 +382,8 @@ class ImagePhotometricCalibration(KebabCaseModel):
 
 
 class ImageCaptureFields:
+    """Image capture fields for iFDO objects."""
+
     image_acquisition: ImageAcquisition | None = None
     image_quality: ImageQuality | None = None
     image_deployment: ImageDeployment | None = None

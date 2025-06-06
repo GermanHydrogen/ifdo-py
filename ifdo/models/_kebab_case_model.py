@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict
 
+
 def _spinalcase_rename(field_name: str) -> str:
     return field_name.replace("_", "-")
 

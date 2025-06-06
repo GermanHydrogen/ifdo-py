@@ -64,7 +64,8 @@ class ImageData(KebabCaseModel, ImageCoreFields, ImageCaptureFields, ImageConten
         image_license (ImageLicense | None): License information for the image.
         image_copyright (str | None): Copyright information for the image.
         image_abstract (str | None): Brief description or abstract of the image content.
-        image_set_local_path (str | None): Local relative or absolute path to a directory in which the referenced image files are located.
+        image_set_local_path (str | None): Local relative or absolute path to a directory in which
+            the referenced image files are located.
         image_acquisition (ImageAcquisition | None): Details about the image acquisition process.
         image_quality (ImageQuality | None): Quality metrics for the image.
         image_deployment (ImageDeployment | None): Information about the deployment of the imaging equipment.
@@ -85,7 +86,8 @@ class ImageData(KebabCaseModel, ImageCoreFields, ImageCaptureFields, ImageConten
         image_overlap_fraction (float | None): The average overlap of two consecutive images.
         image_datetime_format (str | None): Format used for the image_datetime field.
         image_camera_pose (ImageCameraPose | None): Camera pose information.
-        image_camera_housing_viewport (ImageCameraHousingViewport | None): Information about the camera housing viewport.
+        image_camera_housing_viewport (ImageCameraHousingViewport | None): Information about the
+            camera housing viewport.
         image_flatport_parameters (ImageFlatportParameters | None): Parameters for flat port camera housings.
         image_domeport_parameters (ImageDomeportParameters | None): Parameters for dome port camera housings.
         image_camera_calibration_model (ImageCameraCalibrationModel | None): Camera calibration model information.
@@ -143,7 +145,8 @@ class ImageSetHeader(KebabCaseModel, ImageCoreFields, ImageCaptureFields, ImageC
         image_license (ImageLicense | None): License information for the image.
         image_copyright (str | None): Copyright information for the image.
         image_abstract (str | None): Brief description or abstract of the image content.
-        image_set_local_path (str | None): Local relative or absolute path to a directory in which the referenced image files are located.
+        image_set_local_path (str | None): Local relative or absolute path to a directory in which
+            the referenced image files are located.
         image_acquisition (ImageAcquisition | None): Details about the image acquisition process.
         image_quality (ImageQuality | None): Quality metrics for the image.
         image_deployment (ImageDeployment | None): Information about the deployment of the imaging equipment.
@@ -164,7 +167,8 @@ class ImageSetHeader(KebabCaseModel, ImageCoreFields, ImageCaptureFields, ImageC
         image_overlap_fraction (float | None): The average overlap of two consecutive images.
         image_datetime_format (str | None): Format used for the image_datetime field.
         image_camera_pose (ImageCameraPose | None): Camera pose information.
-        image_camera_housing_viewport (ImageCameraHousingViewport | None): Information about the camera housing viewport.
+        image_camera_housing_viewport (ImageCameraHousingViewport | None): Information about the
+            camera housing viewport.
         image_flatport_parameters (ImageFlatportParameters | None): Parameters for flat port camera housings.
         image_domeport_parameters (ImageDomeportParameters | None): Parameters for dome port camera housings.
         image_camera_calibration_model (ImageCameraCalibrationModel | None): Camera calibration model information.
@@ -238,9 +242,11 @@ class iFDO(KebabCaseModel):  # noqa: N801
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> iFDO:
+        """Create an iFDO instance from a dictionary."""
         return cls.model_validate(data)
 
     def to_dict(self) -> dict[str, Any]:
+        """Convert the iFDO instance to a dictionary."""
         return self.model_dump(mode="json", by_alias=True, exclude_none=True)
 
     @classmethod

@@ -7,9 +7,9 @@ Classes:
     AnnotationLabel: Represents an annotation label with metadata.
     ImageAnnotation: Represents an image annotation with coordinates and labels.
 """
+
 from datetime import datetime
 
-from pydantic import BaseModel
 from pydantic import Field
 
 from ifdo.models._kebab_case_model import KebabCaseModel
@@ -94,6 +94,8 @@ class ImageAnnotation(KebabCaseModel):
 
 
 class ImageContentFields:
+    """Image content fields for iFDO objects."""
+
     image_entropy: float | None = None
     image_particle_count: int | None = None
     image_average_color: list[int] | None = None

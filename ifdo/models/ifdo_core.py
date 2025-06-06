@@ -86,6 +86,8 @@ class ImageLicense(BaseModel):
 
 
 class ImageCoreFields:
+    """Core metadata fields for iFDO objects."""
+
     image_datetime: datetime | None = None
     image_latitude: float | None = Field(None, ge=-90, le=90)
     image_longitude: float | None = Field(None, ge=-180, le=180)

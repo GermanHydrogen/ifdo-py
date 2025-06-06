@@ -9,6 +9,7 @@ from ifdo.models import ImageLicense, ImageContext, ImagePI, ImageCreator, Image
 
 OUTPUT_PATH = "/tmp/test_ifdo.json"
 
+
 def test_save_image():
     ifdo = create_ifdo()
     ifdo.image_set_items["SO268-1_21-1_OFOS_SO_CAM-1_20190304_083724.JPG"] = create_ifdo_item()
@@ -22,8 +23,9 @@ def test_save_video():
 
     validate_ifdo(ifdo)
 
+
 def create_ifdo() -> iFDO:
-    ifdo =  iFDO(
+    ifdo = iFDO(
         image_set_header=ImageSetHeader(
             image_set_name="SO268 SO268-1_21-1_OFOS SO_CAM-1_Photo_OFOS",
             image_set_uuid="f840644a-fe4a-46a7-9791-e32c211bcbf5",
@@ -79,6 +81,7 @@ def validate_ifdo(ifdo: iFDO) -> None:
     )
     validator = Draft202012Validator(schema, registry=registry)
     validator.validate(ifdo.to_dict())
+
 
 def load_json(filepath: str) -> dict[str, Any]:
     with open(filepath, "r") as file:
