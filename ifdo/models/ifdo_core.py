@@ -102,3 +102,4 @@ class ImageCoreFields:
     image_license: ImageLicense | None = None
     image_copyright: str | None = None
     image_abstract: str | None = None
+    image_set_local_path: str | None = None
