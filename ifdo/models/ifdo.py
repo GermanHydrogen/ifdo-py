@@ -22,21 +22,28 @@ Classes:
     iFDO: Implements the Image FAIR Digital Object specification.
 """
 
-from __future__ import annotations
-
 import json
+from copy import deepcopy
 from pathlib import Path
-from typing import Any
+from typing import Any, Self
 
 import yaml
+from pydantic import SerializerFunctionWrapHandler, model_serializer, model_validator
 
+from ifdo._datetime import check_datatime_format
+from ifdo._datetime._serialize_datetime import add_datetime_format_info
 from ifdo.models._kebab_case_model import KebabCaseModel
 from ifdo.models.ifdo_capture import ImageCaptureFields
 from ifdo.models.ifdo_content import ImageContentFields
 from ifdo.models.ifdo_core import ImageCoreFields
 
 
-class ImageData(KebabCaseModel, ImageCoreFields, ImageCaptureFields, ImageContentFields):
+class ImageData(
+    KebabCaseModel,
+    ImageCoreFields,
+    ImageCaptureFields,
+    ImageContentFields,
+):
     """
     Represent image data with associated metadata and annotations.
 
@@ -120,7 +127,12 @@ class ImageData(KebabCaseModel, ImageCoreFields, ImageCaptureFields, ImageConten
     image_handle: str | None = None
 
 
-class ImageSetHeader(KebabCaseModel, ImageCoreFields, ImageCaptureFields, ImageContentFields):
+class ImageSetHeader(
+    KebabCaseModel,
+    ImageCoreFields,
+    ImageCaptureFields,
+    ImageContentFields,
+):
     """
     Represent an image set header with detailed metadata and attributes.
 
@@ -240,8 +252,22 @@ class iFDO(KebabCaseModel):  # noqa: N801
     image_set_header: ImageSetHeader
     image_set_items: dict[str, ImageData | list[ImageData]]
 
+    @model_serializer(mode="wrap")
+    def serialize(self, nxt: SerializerFunctionWrapHandler) -> dict[str, Any]:
+        ifdo = deepcopy(self)
+        add_datetime_format_info(ifdo)
+        return nxt(ifdo)
+
+    @model_validator(mode="before")
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> iFDO:
+    def validate_image_datatime(cls, data: Any) -> Any:
+        if not isinstance(data, dict):
+            return data
+        check_datatime_format(data)
+        return data
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> Self:
         """Create an iFDO instance from a dictionary."""
         return cls.model_validate(data)
 
@@ -250,7 +276,7 @@ class iFDO(KebabCaseModel):  # noqa: N801
         return self.model_dump(mode="json", by_alias=True, exclude_none=True)
 
     @classmethod
-    def load(cls, path: str | Path) -> iFDO:
+    def load(cls, path: str | Path) -> Self:
         """
         Load an iFDO from a YAML or JSON file.
 
@@ -271,7 +297,9 @@ class iFDO(KebabCaseModel):  # noqa: N801
             elif suffix == "json":
                 d = json.load(f)
             else:
-                raise ValueError("Unsupported file format. Use YAML (.yaml, .yml) or JSON (.json).")
+                raise ValueError(
+                    "Unsupported file format. Use YAML (.yaml, .yml) or JSON (.json).",
+                )
 
         return cls.from_dict(d)
 
