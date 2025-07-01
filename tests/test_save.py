@@ -40,7 +40,6 @@ def create_ifdo() -> iFDO:
             image_set_name="SO268 SO268-1_21-1_OFOS SO_CAM-1_Photo_OFOS",
             image_set_uuid="f840644a-fe4a-46a7-9791-e32c211bcbf5",
             image_set_handle="https://hdl.handle.net/20.500.12085/f840644a-fe4a-46a7-9791-e32c211bcbf5",
-            image_datetime=datetime(2025, 1, 1, 1, 1, 1, 100000),
         ),
         image_set_items={},
     )
@@ -60,12 +59,16 @@ def create_ifdo() -> iFDO:
     ifdo.image_set_header.image_altitude_meters = 1.0
     ifdo.image_set_header.image_coordinate_reference_system = "WSG84"
     ifdo.image_set_header.image_coordinate_uncertainty_meters = 0.1
+    ifdo.image_set_header.image_datetime = datetime(2025, 1, 1, 1, 1, 1, 100000)
 
     return ifdo
 
 
 def create_ifdo_item() -> ImageData:
-    image = ImageData()
+    image = ImageData(
+        image_latitude=0.0,
+        image_longitude=0.0,
+    )
     image.image_handle = "test"
     image.image_hash_sha256 = "83f30eb35d1325c44c85fba0cf478825c0a629d20177a945069934f6cd07e087"
     image.image_uuid = "c6b8d981-05c7-449f-85a9-906ab866bfb6"

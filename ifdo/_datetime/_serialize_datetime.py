@@ -3,15 +3,13 @@ from typing import TYPE_CHECKING
 from ifdo._datetime._format import DEFAULT_DATETIME_FORMAT
 
 if TYPE_CHECKING:
-    from ifdo import iFDO, ImageData
+    from ifdo import ImageData, iFDO
 
 
 def add_datetime_format_info(ifdo: "iFDO") -> None:
-    header_format = (
-        ifdo.image_set_header.image_datetime_format or DEFAULT_DATETIME_FORMAT
-    )
+    header_format = ifdo.image_set_header.image_datetime_format or DEFAULT_DATETIME_FORMAT
 
-    setattr(ifdo.image_set_header, "_image_datetime_format", header_format)
+    ifdo.image_set_header._image_datetime_format = header_format  # type: ignore[attr-defined] # noqa: SLF001
 
     for image_item in ifdo.image_set_items.values():
         if isinstance(image_item, list):
@@ -33,5 +31,5 @@ def _serialize_video_datetimes(images: list["ImageData"], header_format: str) ->
 def _serialize_image_datetimes(image: "ImageData", header_format: str) -> str:
     datetime_format = image.image_datetime_format or header_format
 
-    setattr(image, "_image_datetime_format", datetime_format)
+    image._image_datetime_format = datetime_format  # type: ignore[attr-defined] # noqa: SLF001
     return datetime_format

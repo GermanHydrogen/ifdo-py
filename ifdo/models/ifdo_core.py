@@ -8,7 +8,7 @@ Classes:
     ImageLicense: Represents an image license.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from pydantic import BaseModel, Field, field_serializer
 
@@ -110,7 +110,7 @@ class ImageCoreFields(BaseModel):
     image_set_local_path: str | None = None
 
     @field_serializer("image_datetime", when_used="json")
-    def serialize_image_datetime(self, image_datetime: datetime | None) -> str | None:
+    def _serialize_image_datetime(self, image_datetime: datetime | None) -> str | None:
         if image_datetime is None:
             return None
 
@@ -119,6 +119,9 @@ class ImageCoreFields(BaseModel):
             "_image_datetime_format",
             DEFAULT_DATETIME_FORMAT,
         )
+
+        if image_datetime.tzinfo is not None:
+            image_datetime = image_datetime.astimezone(timezone.utc)
 
         if datetime_format is not None and datetime_format != "":
             return image_datetime.strftime(datetime_format)

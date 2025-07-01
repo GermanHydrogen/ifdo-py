@@ -27,7 +27,7 @@ from __future__ import annotations
 import json
 from copy import deepcopy
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import yaml
 from pydantic import SerializerFunctionWrapHandler, model_serializer, model_validator
@@ -255,14 +255,14 @@ class iFDO(KebabCaseModel):  # noqa: N801
     image_set_items: dict[str, ImageData | list[ImageData]]
 
     @model_serializer(mode="wrap")
-    def serialize(self, nxt: SerializerFunctionWrapHandler) -> dict[str, Any]:
+    def _serialize(self, nxt: SerializerFunctionWrapHandler) -> dict[str, Any]:
         ifdo = deepcopy(self)
         add_datetime_format_info(ifdo)
-        return nxt(ifdo)
+        return cast("dict[str, Any]", nxt(ifdo))
 
     @model_validator(mode="before")
     @classmethod
-    def validate_image_datatime(cls, data: Any) -> Any:
+    def _validate_image_datatime(cls, data: Any) -> Any:  # noqa: ANN401
         if not isinstance(data, dict):
             return data
         check_datatime_format(data)
