@@ -22,10 +22,12 @@ Classes:
     iFDO: Implements the Image FAIR Digital Object specification.
 """
 
+from __future__ import annotations
+
 import json
 from copy import deepcopy
 from pathlib import Path
-from typing import Any, Self
+from typing import Any
 
 import yaml
 from pydantic import SerializerFunctionWrapHandler, model_serializer, model_validator
@@ -267,7 +269,7 @@ class iFDO(KebabCaseModel):  # noqa: N801
         return data
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> Self:
+    def from_dict(cls, data: dict[str, Any]) -> iFDO:
         """Create an iFDO instance from a dictionary."""
         return cls.model_validate(data)
 
@@ -276,7 +278,7 @@ class iFDO(KebabCaseModel):  # noqa: N801
         return self.model_dump(mode="json", by_alias=True, exclude_none=True)
 
     @classmethod
-    def load(cls, path: str | Path) -> Self:
+    def load(cls, path: str | Path) -> iFDO:
         """
         Load an iFDO from a YAML or JSON file.
 
