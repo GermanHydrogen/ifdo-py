@@ -5,7 +5,14 @@ from typing import Any, cast
 from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
 from ifdo import iFDO
-from ifdo.models import ImageLicense, ImageContext, ImagePI, ImageCreator, ImageData, ImageSetHeader
+from ifdo.models import (
+    ImageLicense,
+    ImageContext,
+    ImagePI,
+    ImageCreator,
+    ImageData,
+    ImageSetHeader,
+)
 
 OUTPUT_PATH = "/tmp/test_ifdo.json"
 
@@ -13,8 +20,11 @@ OUTPUT_PATH = "/tmp/test_ifdo.json"
 def test_save_image():
     ifdo = create_ifdo()
     ifdo.image_set_items["SO268-1_21-1_OFOS_SO_CAM-1_20190304_083724.JPG"] = create_ifdo_item()
-
     validate_ifdo(ifdo)
+
+    result = ifdo.to_dict()
+    assert "_image_datetime_format" not in result["image-set-header"]
+    assert result["image-set-header"]["image-datetime"] == "2025-01-01 01:01:01.100000"
 
 
 def test_save_video():
@@ -49,13 +59,16 @@ def create_ifdo() -> iFDO:
     ifdo.image_set_header.image_altitude_meters = 1.0
     ifdo.image_set_header.image_coordinate_reference_system = "WSG84"
     ifdo.image_set_header.image_coordinate_uncertainty_meters = 0.1
-    ifdo.image_set_header.image_datetime = datetime(2020, 1, 1)
+    ifdo.image_set_header.image_datetime = datetime(2025, 1, 1, 1, 1, 1, 100000)
 
     return ifdo
 
 
 def create_ifdo_item() -> ImageData:
-    image = ImageData()
+    image = ImageData(
+        image_latitude=0.0,
+        image_longitude=0.0,
+    )
     image.image_handle = "test"
     image.image_hash_sha256 = "83f30eb35d1325c44c85fba0cf478825c0a629d20177a945069934f6cd07e087"
     image.image_uuid = "c6b8d981-05c7-449f-85a9-906ab866bfb6"

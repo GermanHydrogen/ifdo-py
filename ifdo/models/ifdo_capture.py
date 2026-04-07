@@ -402,7 +402,6 @@ class ImageCaptureFields:
     image_camera_pitch_degrees: float | None = None
     image_camera_roll_degrees: float | None = None
     image_overlap_fraction: float | None = None
-    image_datetime_format: str | None = None
     image_camera_pose: ImageCameraPose | None = None
     image_camera_housing_viewport: ImageCameraHousingViewport | None = None
     image_flatport_parameters: ImageFlatportParameters | None = None

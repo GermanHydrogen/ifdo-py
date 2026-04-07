@@ -8,9 +8,11 @@ Classes:
     ImageLicense: Represents an image license.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_serializer
+
+from ifdo._datetime._format import DEFAULT_DATETIME_FORMAT
 
 
 class ImagePI(BaseModel):
@@ -85,10 +87,11 @@ class ImageLicense(BaseModel):
         return hash((self.name, self.uri))
 
 
-class ImageCoreFields:
+class ImageCoreFields(BaseModel):
     """Core metadata fields for iFDO objects."""
 
     image_datetime: datetime | None = None
+    image_datetime_format: str | None = None
     image_latitude: float | None = Field(None, ge=-90, le=90)
     image_longitude: float | None = Field(None, ge=-180, le=180)
     image_altitude_meters: float | None = None
@@ -105,3 +108,21 @@ class ImageCoreFields:
     image_copyright: str | None = None
     image_abstract: str | None = None
     image_set_local_path: str | None = None
+
+    @field_serializer("image_datetime", when_used="json")
+    def _serialize_image_datetime(self, image_datetime: datetime | None) -> str | None:
+        if image_datetime is None:
+            return None
+
+        datetime_format = getattr(
+            self,
+            "_image_datetime_format",
+            DEFAULT_DATETIME_FORMAT,
+        )
+
+        if image_datetime.tzinfo is not None:
+            image_datetime = image_datetime.astimezone(timezone.utc)
+
+        if datetime_format is not None and datetime_format != "":
+            return image_datetime.strftime(datetime_format)
+        return None
