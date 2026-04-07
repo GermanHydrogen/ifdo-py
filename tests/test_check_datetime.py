@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from ifdo._datetime import check_datatime_format
+from ifdo._datetime import check_datetime_format
 
 
 def test_check_datatime_default() -> None:
@@ -10,7 +10,7 @@ def test_check_datatime_default() -> None:
             "image-datetime": "2015-01-01 02:04:03.1000",
         }
     }
-    check_datatime_format(matching_data)
+    check_datetime_format(matching_data)
     assert matching_data["image-set-header"]["image-datetime"] == datetime(
         2015, 1, 1, 2, 4, 3, 100000, tzinfo=timezone.utc
     )
@@ -21,7 +21,7 @@ def test_check_datatime_default() -> None:
             "image-datetime": "2015-01-01 02:04:03",
         }
     }
-    check_datatime_format(fallback_data)
+    check_datetime_format(fallback_data)
     assert fallback_data["image-set-header"]["image-datetime"] == "2015-01-01 02:04:03"
 
 
@@ -34,7 +34,7 @@ def test_check_datetime_images() -> None:
         },
         "image-set-items": {"image": {"image-datetime": "2015-01-01T20:21:32"}},
     }
-    check_datatime_format(matching_data)
+    check_datetime_format(matching_data)
     assert matching_data["image-set-items"]["image"]["image-datetime"] == datetime(
         2015, 1, 1, 20, 21, 32, tzinfo=timezone.utc
     )
@@ -47,7 +47,7 @@ def test_check_datetime_images() -> None:
         },
         "image-set-items": {"image": {"image-datetime": "2015-01-01 20:21:32"}},
     }
-    check_datatime_format(fallback_data)
+    check_datetime_format(fallback_data)
     assert fallback_data["image-set-items"]["image"]["image-datetime"] == "2015-01-01 20:21:32"
 
 
@@ -65,7 +65,7 @@ def test_check_datetime_videos() -> None:
             ]
         },
     }
-    check_datatime_format(matching_data)
+    check_datetime_format(matching_data)
     assert matching_data["image-set-items"]["image"][1]["image-datetime"] == datetime(
         2015, 1, 1, 20, 21, 32, tzinfo=timezone.utc
     )
@@ -83,5 +83,5 @@ def test_check_datetime_videos() -> None:
             ]
         },
     }
-    check_datatime_format(fallback_data)
+    check_datetime_format(fallback_data)
     assert fallback_data["image-set-items"]["image"][1]["image-datetime"] == "2015-01-01 20:21:32"

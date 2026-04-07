@@ -32,7 +32,7 @@ from typing import Any, cast
 import yaml
 from pydantic import SerializerFunctionWrapHandler, model_serializer, model_validator
 
-from ifdo._datetime import check_datatime_format
+from ifdo._datetime import check_datetime_format
 from ifdo._datetime._serialize_datetime import add_datetime_format_info
 from ifdo.models._kebab_case_model import KebabCaseModel
 from ifdo.models.ifdo_capture import ImageCaptureFields
@@ -262,10 +262,10 @@ class iFDO(KebabCaseModel):  # noqa: N801
 
     @model_validator(mode="before")
     @classmethod
-    def _validate_image_datatime(cls, data: Any) -> Any:  # noqa: ANN401
+    def _validate_image_datetime(cls, data: Any) -> Any:  # noqa: ANN401
         if not isinstance(data, dict):
             return data
-        check_datatime_format(data)
+        check_datetime_format(data)
         return data
 
     @classmethod

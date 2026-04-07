@@ -4,7 +4,7 @@ from typing import Any
 from ._format import DEFAULT_DATETIME_FORMAT
 
 
-def check_datatime_format(ifdo_data: dict[str, Any]) -> None:
+def check_datetime_format(ifdo_data: dict[str, Any]) -> None:
     if "image-set-header" not in ifdo_data:
         return
     image_set_header = ifdo_data["image-set-header"]
