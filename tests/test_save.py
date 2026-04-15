@@ -19,9 +19,7 @@ OUTPUT_PATH = "/tmp/test_ifdo.json"
 
 def test_save_image():
     ifdo = create_ifdo()
-    ifdo.image_set_items["SO268-1_21-1_OFOS_SO_CAM-1_20190304_083724.JPG"] = (
-        create_ifdo_item()
-    )
+    ifdo.image_set_items["SO268-1_21-1_OFOS_SO_CAM-1_20190304_083724.JPG"] = create_ifdo_item()
     validate_ifdo(ifdo)
 
     result = ifdo.to_dict()
@@ -34,9 +32,7 @@ def test_save_image():
 
 def test_save_video():
     ifdo = create_ifdo()
-    ifdo.image_set_items["SO268-1_21-1_OFOS_SO_CAM-1_20190304_083724.JPG"] = [
-        create_ifdo_item()
-    ]
+    ifdo.image_set_items["SO268-1_21-1_OFOS_SO_CAM-1_20190304_083724.JPG"] = [create_ifdo_item()]
 
     validate_ifdo(ifdo)
 
@@ -77,9 +73,7 @@ def create_ifdo_item() -> ImageData:
         image_longitude=0.0,
     )
     image.image_handle = "test"
-    image.image_hash_sha256 = (
-        "83f30eb35d1325c44c85fba0cf478825c0a629d20177a945069934f6cd07e087"
-    )
+    image.image_hash_sha256 = "83f30eb35d1325c44c85fba0cf478825c0a629d20177a945069934f6cd07e087"
     image.image_uuid = "c6b8d981-05c7-449f-85a9-906ab866bfb6"
     image.image_datetime = datetime(2020, 1, 1)
 

@@ -260,9 +260,7 @@ class iFDO(KebabCaseModel):  # noqa: N801
         add_datetime_format_info(ifdo)
         serialized = cast("dict[str, Any]", nxt(ifdo))
 
-        serialized["$schema"] = (
-            "https://hdl.handle.net/20.500.12085/aad5955a-b88a-417d-b9c5-442accc67f2f"
-        )
+        serialized["$schema"] = "https://hdl.handle.net/20.500.12085/aad5955a-b88a-417d-b9c5-442accc67f2f"
 
         return serialized
 
