@@ -359,12 +359,13 @@ class ImageStereoCameraCalibrationModel(KebabCaseModel):
     """
     Define a stereo camera calibration model with a relative orientation matrix and relative translation vector.
 
-    Information required to rectify stereo images given as rotations and translations from the camera coordiantes to a coordinate system chosen by the author.
-    The coordinate system must be the same for both images of a stereo image, which enables the retrival of the transformation between the camera coordinates of two images.
+    Information required to rectify stereo images given as rotations and translations from the camera coordiantes
+    to a coordinate system chosen by the author. The coordinate system must be the same for both images of a
+    stereo image, which enables the retrival of the transformation between the camera coordinates of two images.
 
     Attributes:
-        relative_orientation_matrix (tuple[tuple[float, float, float], tuple[float, float, float], tuple[float, float, float]]): Orientation matrix that transforms the camera coordinates into a coordinate system chosen by the author.
-        relative_translation (tuple[float, float, float]): Translation vector that translates the camera coordinates into a coordiante system chosen by the author.
+        relative_orientation_matrix: Relative orientation matrix.
+        relative_translation: Relative translation vector.
     """
 
     relative_orientation_matrix: tuple[
